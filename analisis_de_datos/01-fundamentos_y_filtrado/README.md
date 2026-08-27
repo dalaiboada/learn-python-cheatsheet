@@ -2,14 +2,16 @@
 
 Esta sección contiene materiales y ejercicios para aprender a filtrar y manipular datos utilizando la librería **pandas** en Python.
 
+Se familiarizarán con el concepto de **Análisis de datos**, aprenderán sobre las estructuras **Series** y **DataFrame**; a trabajar con **archivos CSV**, a obtener información general sobre un conjunto de datos, a calcular **indicadores estadísticos**, y a realizar filtrado de datos.
+
 ## 📚 Índice de Contenidos
 
 ### 📖 Introducción
 
-- [Etapas de un proyecto](00%20-%20Introduccion/01-Etapas_de_un_proyecto.md)
-- [Análisis de datos](00%20-%20Introduccion/02-Analisis_de_datos.md)
-- [Conceptos de Estadística](00%20-%20Introduccion/03-Conceptos_de_Estadistica.md)
-- [Resumen](00%20-%20Introduccion/Resumen.md)
+- [Etapas de un proyecto](<00%20-%20Introduccion/01-Etapas_de_un_proyecto.md>)
+- [Análisis de datos](<00%20-%20Introduccion/02-Analisis_de_datos.md>)
+- [Conceptos de Estadística](<00%20-%20Introduccion/03-Conceptos_de_Estadistica.md>)
+- [Resumen](<00%20-%20Introduccion/Resumen.md>)
 
 ### 💻 Conceptos Prácticos
 
