@@ -7,6 +7,7 @@ Este módulo cubre los fundamentos y técnicas esenciales para el análisis de d
 - [Fundamentos y filtrado de Datos](./01-fundamentos_y_filtrado/README.md)
 - [Métodos de agrupación de datos](#métodos-de-agrupación-de-datos)
 - [Limpieza de datos](#limpieza-de-datos)
+- **Recuerso adicional**: [Cheatsheet de Pandas](./recursos_adicionales/pandas_cheatsheet.md)
 
 ## Fundamentos y filtrado de datos
 
