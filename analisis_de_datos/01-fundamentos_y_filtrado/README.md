@@ -25,6 +25,8 @@ Se familiarizarán con el concepto de **Análisis de datos**, aprenderán sobre 
 
 ### 🛤️ Rutas de Aprendizaje
 
+- [Guía del Datasheet: Sobre *GoogleApps*](./ejercicios/sobre_google_apps.md)
+
 - **Ruta 1**:
   - [Archivos comprimidos](ruta-1/archivos-ruta-1.zip)
   - [Ejercicio](ejercicios/ruta-1/your_code.py)
