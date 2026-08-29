@@ -24,7 +24,8 @@ Explora los módulos especializados del repositorio:
 | `10-conjuntos`         | Conjuntos                                                                                                 | Colecciones únicas, eliminación de duplicados y operaciones matemáticas (unión, intersección). | [Ver](./10-conjuntos/README.md)         |
 | `11-funciones`         | Funciones                                                                                                 | Modularización del código, parámetros, retorno y reutilización.                                | [Ver](./11-funciones/README.md)         |
 | `pygame`               | Pygame                                                                                                    | Módulo de videojuegos 2D: ventana, eventos, sprites y más.                                     | [Ver](./pygame/README.md)               |
-| `Análisis de Datos`    | Análisis de Datos                                                                                         | Módulo para análisis de datos con pandas y numpy.                                              | [Ver](./analisis_de_datos/README.md)    |
+| `analisis_de_datos`    | Análisis de Datos                                                                                         | Módulo para análisis de datos con pandas y numpy.                                              | [Ver](./analisis_de_datos/README.md)    |
+| `Desarrollo web`    | Desarrollo web | Módulo para el desarrollo de software web con interfaces, backend y base de datos usando herramientas como HTML, css, python, SQL y sqlite, Flask y mucho. | [Ver](./desarrollo_web/README.md) |
 
 ---
 
