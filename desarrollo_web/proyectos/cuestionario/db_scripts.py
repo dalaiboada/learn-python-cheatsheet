@@ -84,6 +84,9 @@ def create():
 
 def add_questions():
     questions = [
+        ('¿2+2?', '4', '3', '5', '6'),
+        ('¿4+2?', '6', '5', '7', '8'),
+        ('¿6+2?', '8', '7', '9', '10'),
         ('¿Cuántos meses en un año tienen 28 días?', 'Todos', 'Uno', 'Ninguno', 'Dos'),
         ('¿Qué aspecto tendrá el acantilado verde si se cae en el Mar Rojo?', 'Mojado', 'Rojo', 'No cambiará', 'Púrpura'),
         ('¿Con qué mano es mejor mezclar el té?', 'Con una cuchara', 'Derecha', 'Izquierda', 'Cualquiera'),
@@ -98,6 +101,7 @@ def add_questions():
  
 def add_quiz():
     quizes = [
+        ('Pruebas', ),
         ('propio juego', ),
         ('¿Quién quiere ser millonario?', ),
         ('El más inteligente', )
@@ -130,7 +134,10 @@ def add_links():
     links = [
         (1,1),
         (1,2),
-        (1,3)
+        (1,3),
+        (2,4),
+        (2,5),
+        (2,6)
     ]
     open()
     cursor.executemany('''INSERT INTO quiz_content (quiz_id, question_id) VALUES (?,?)''', links)
@@ -169,7 +176,7 @@ def check_answer(q_id, ans_text):
     '''
 
     open()
-    cursor.execute(query, str([q_id]))
+    cursor.execute(query, (q_id,))
     result = cursor.fetchone()
     close()
     
