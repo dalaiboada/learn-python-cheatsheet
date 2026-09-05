@@ -2,7 +2,10 @@
 <html>
   <head>
     <meta charset="UTF-8" />
-    <link rel="stylesheet" href="" />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='style_quiz.css') }}"
+    />
     <title>Resultado</title>
   </head>
   <body>
@@ -32,10 +35,42 @@
         Quiz
       </div>
     </nav>
-    
+
     <!-- Contenido principal -->
-    <main>
-      <h1>Resultado</h1>
+    <main class="main-content">
+      <div class="score-display">
+        <div class="score-numbers">
+          <span class="score-right">{{ correctas }}</span>
+          <span class="score-divider">/</span>
+          <span class="score-total">{{ total }}</span>
+        </div>
+        <span class="score-label">Aciertos</span>
+      </div>
+
+      <!-- Enlace para reiniciar -->
+      <div class="quiz-form">
+        <a
+          href="{% if url_for is defined %}{{ url_for('index') }}{% else %}#{% endif %}"
+          class="btn-submit"
+        >
+          <!-- Icono de recargar -->
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <polyline points="1 4 1 10 7 10"></polyline>
+            <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path>
+          </svg>
+          Volver a jugar
+        </a>
+      </div>
     </main>
 
     <!-- Pie de página -->
