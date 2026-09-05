@@ -228,9 +228,9 @@ body {
   box-shadow: 0 20px 25px -5px rgba(79, 70, 229, 0.4);
 }
 
-.btn-submit svg {
-  width: 1.25rem;
-  height: 1.25rem;
+.btn-submit i {
+  font-size: 1.25rem;
+  line-height: 1;
 }
 
 .button:active {
@@ -337,9 +337,9 @@ body {
   letter-spacing: -0.025em;
 }
 
-.logo svg {
-  width: 1.5rem;
-  height: 1.5rem;
+.logo i {
+  font-size: 1.5rem;
+  line-height: 1;
   color: var(--primary);
 }
 
@@ -424,9 +424,9 @@ body {
   color: var(--primary);
 }
 
-.select-icon svg {
-  width: 1.5rem;
-  height: 1.5rem;
+.select-icon i {
+  font-size: 1.5rem;
+  line-height: 1;
 }
 
 .footer {
