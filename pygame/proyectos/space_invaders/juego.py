@@ -1,12 +1,5 @@
 from pygame import *
 from random import randint
-
-# música de fondo
-mixer.init()
-mixer.music.load('space.ogg')
-mixer.music.play()
-fire_sound = mixer.Sound('fire.ogg')
-
 # fuentes
 font.init()
 font1 = font.Font(None, 80)
