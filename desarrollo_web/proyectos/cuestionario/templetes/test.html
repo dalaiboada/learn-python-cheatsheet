@@ -2,7 +2,10 @@
 <html>
   <head>
     <meta charset="UTF-8" />
-    <link rel="stylesheet" href="" />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='style_quiz.css') }}"
+    />
     <title>Test</title>
   </head>
   <body>
@@ -32,10 +35,53 @@
         Quiz
       </div>
     </nav>
-    
+
     <!-- Contenido principal -->
-    <main>
-      <h1>Test</h1>
+    <main class="main-content">
+      <h1 class="question-title">{{ pregunta }}</h1>
+
+      <form method="post" action="test" class="quiz-form">
+        <!-- Input oculto original -->
+        <input type="hidden" name="q_id" value="{{quest_id}}" />
+
+        <!-- Bucle para las respuestas -->
+        {% for respuesta in lista_respuestas %}
+        <label class="custom-radio">
+          <input
+            type="radio"
+            name="ans_text"
+            value="{{ respuesta }}"
+            required
+          />
+
+          <div class="radio-label">
+            <div class="radio-indicator"></div>
+
+            <span>{{ respuesta }}</span>
+          </div>
+        </label>
+        {% endfor %}
+
+        <div class="submit-container">
+          <button type="submit" class="btn-submit">
+            Responder
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </button>
+        </div>
+      </form>
     </main>
 
     <!-- Pie de página -->
@@ -44,4 +90,3 @@
     </footer>
   </body>
 </html>
-  
