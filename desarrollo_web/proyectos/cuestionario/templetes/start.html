@@ -35,39 +35,59 @@
         Quiz
       </div>
     </nav>
-    
-    <!-- Contenido principal -->
-    <main class='main-content'>
-      <h1 class='hero-title'>Pon a prueba tu conocimiento</h1>
-      <p class='hero-subtitle'>Selecciona una categoría de la lista desplegable y descubre cuánto sabes. ¿Estás listo para el desafío de hoy?</p>
 
-      <form class="quiz-form">
+    <!-- Contenido principal -->
+    <main class="main-content">
+      <h1 class="hero-title">
+        Pon a prueba tu <span class="text-gradient">conocimiento</span>
+      </h1>
+
+      <p class="hero-subtitle">
+        Selecciona una categoría de la lista desplegable y descubre cuánto
+        sabes. ¿Estás listo para el desafío de hoy?
+      </p>
+
+      <!-- Formulario -->
+      <form method="post" action="/" class="quiz-form">
         <div class="select-wrapper">
           <select id="quiz-select" name="quiz" required class="custom-select">
-            <option value="" disabled selected>Selecciona una categoría</option>
-            
-            <option>Ciencia</option>
-            <option>Historia</option>
-            <option>Geografía</option>
+            <option value="" disabled selected>
+              Selecciona tu cuestionario...
+            </option>
+
+            <!-- Cuestionarios -->
+            {% for id, name in lista_cuestionarios %}
+            <option value="{{id}}">{{name}}</option>
+            {% endfor %}
           </select>
 
-          <button type="submit" class="btn-submit">
-            <span>Comenzar</span>
-
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 20 20"
-              fill="currentColor"
-            >
+          <div class="select-icon">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path
-                fill-rule="evenodd"
-                d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
-                clip-rule="evenodd"
-              />
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M19 9l-7 7-7-7"
+              ></path>
             </svg>
-          </button>
+          </div>
         </div>
-        
+
+        <button type="submit" class="btn-submit">
+          <span>Comenzar</span>
+
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
+              clip-rule="evenodd"
+            />
+          </svg>
+        </button>
       </form>
     </main>
 
