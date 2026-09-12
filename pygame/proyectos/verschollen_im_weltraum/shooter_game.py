@@ -14,10 +14,12 @@ sonido_fondo.play(-1)  # Reproduce el sonido de fondo en bucle
 # texto
 font.init()
 font1 = font.Font(None, 18)
-font2 = font.Font(None, 55)
+font2 = font.Font('fuente2.ttf', 28)
 
 win = font1.render('YEA WIN', True, (255, 255, 0))
 lose = font1.render('HA HA LOSER', True, (119, 240, 50))
+
+text_pausa = font2.render('PAUSA', 1, (255, 255, 0))
 
 # imagenes
 img_back = "fondo.jpg"
@@ -175,14 +177,15 @@ lista_botones = [btn_jugar]
 # ciclo de juego
 finish = False
 ejecutando = True
+pausa = False
 reloj = time.Clock()
 FPS = 60
 
 control_vista = 'menu'  # Variable para controlar la vista actual (puede ser 'menu' o 'juego')
 
-def cambiar_vista(nuevo_vista):
+def cambiar_vista(nuevo_estado):
 	global control_vista
-	control_vista = nuevo_vista
+	control_vista = nuevo_estado
 
 while ejecutando:
 	# EVENTOS
@@ -193,20 +196,26 @@ while ejecutando:
 
 		# Teclado
 		elif evento.type == KEYDOWN:
-			if evento.key == K_SPACE:
-				Neil_Armstrong.fire()
+			# pausar (ESC)
+			if evento.key == K_ESCAPE:
+				pausa = not pausa
     
-			if evento.key == K_LSHIFT:
-				Neil_Armstrong.bomb()
-    
-			if evento.key == K_RSHIFT:
-				Neil_Armstrong.fire_sin()
+			if not pausa:
+				if evento.key == K_SPACE:
+					Neil_Armstrong.fire()
+
+				if evento.key == K_LSHIFT:
+					Neil_Armstrong.bomb()
+
+				if evento.key == K_RSHIFT:
+					Neil_Armstrong.fire_sin()
     
 		# Mouse
 		elif evento.type == MOUSEBUTTONDOWN:
-			if evento.button == 1:
-				for btn in lista_botones:
-					btn.verificar_click(evento.pos)
+			if not pausa:
+				if evento.button == 1:
+					for btn in lista_botones:
+						btn.verificar_click(evento.pos)
 
 	if finish != True:
 		ventana.blit(fondo, (0, 0))
@@ -235,28 +244,30 @@ while ejecutando:
 			Neil_Armstrong.reset()
 			monsters.draw(ventana)
 			bullets.draw(ventana)
-	
-			# movimiento
-			bullets.update()
-			monsters.update()
-			Neil_Armstrong.update()
 
-			# colisiones
-			collides = sprite.groupcollide(monsters, bullets, True, True)
-			for c in collides:
-				score = score + 1
-				monster = Enemy(img_Enemy, randint(80, win_width - 80), 70, 48, 48, randint(1, 5))
-				monsters.add(monster)
+			if not pausa:
+				# movimiento
+				bullets.update()
+				monsters.update()
+				Neil_Armstrong.update()
 
-			# derrota: jugador choca con enemigo O alcanza el límite de fallos
-			if sprite.spritecollide(Neil_Armstrong, monsters, False) or lost >= max_lost:
-				finish = True
-				ventana.blit(lose, (200, 200))
+				# colisiones
+				collides = sprite.groupcollide(monsters, bullets, True, True)
+				for c in collides:
+					score = score + 1
+					monster = Enemy(img_Enemy, randint(80, win_width - 80), 70, 48, 48, randint(1, 5))
+					monsters.add(monster)
 
-			# victoria: jugador alcanza el puntaje objetivo
-			if score >= goal:
-				finish = True
-				ventana.blit(win, (200, 200))
+				# derrota: jugador choca con enemigo O alcanza el límite de fallos
+				if sprite.spritecollide(Neil_Armstrong, monsters, False) or lost >= max_lost:
+					finish = True
+					ventana.blit(lose, (200, 200))
 
+				# victoria: jugador alcanza el puntaje objetivo
+				if score >= goal:
+					finish = True
+					ventana.blit(win, (200, 200))
+			else:
+				ventana.blit(text_pausa, (win_width // 2 - 50, win_height // 2 - 50))
 		display.update()
 	reloj.tick(FPS)
