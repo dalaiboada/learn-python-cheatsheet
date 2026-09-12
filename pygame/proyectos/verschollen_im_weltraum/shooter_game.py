@@ -126,6 +126,8 @@ ejecutando = True
 reloj = time.Clock()
 FPS = 60
 
+control_vista = 'menu'  # Variable para controlar la vista actual (puede ser 'menu' o 'juego')
+
 while ejecutando:
 	# EVENTOS
 	for evento in event.get():
@@ -133,7 +135,7 @@ while ejecutando:
 		if evento.type == QUIT:
 			ejecutando = False
 
-		# teclado
+		# Teclado
 		elif evento.type == KEYDOWN:
 			if evento.key == K_SPACE:
 				Neil_Armstrong.fire()
@@ -147,39 +149,43 @@ while ejecutando:
 	if finish != True:
 		ventana.blit(fondo, (0, 0))
 
-		# texto
-		text = font2.render('Puntaje:'+ str(score), 1, (208, 222, 67))
-		ventana.blit(text, (10, 20))
+		if control_vista == 'menu':
+			pass  # Reemplaza esto con código para mostrar el menú y los botones
 
-		text_lose = font2.render('Fallos:'+ str(lost), 1, (227, 18, 18))
-		ventana.blit(text_lose, (10, 50))
+		elif control_vista == 'juego':
+			# texto
+			text = font2.render('Puntaje:'+ str(score), 1, (208, 222, 67))
+			ventana.blit(text, (10, 20))
 
-		# renderizado
-		Neil_Armstrong.reset()
-		monsters.draw(ventana)
-		bullets.draw(ventana)
-  
-		# movimiento
-		bullets.update()
-		monsters.update()
-		Neil_Armstrong.update()
+			text_lose = font2.render('Fallos:'+ str(lost), 1, (227, 18, 18))
+			ventana.blit(text_lose, (10, 50))
 
-		# colisiones
-		collides = sprite.groupcollide(monsters, bullets, True, True)
-		for c in collides:
-			score = score + 1
-			monster = Enemy(img_Enemy, randint(80, win_width - 80), 70, 48, 48, randint(1, 5))
-			monsters.add(monster)
+			# renderizado
+			Neil_Armstrong.reset()
+			monsters.draw(ventana)
+			bullets.draw(ventana)
+	
+			# movimiento
+			bullets.update()
+			monsters.update()
+			Neil_Armstrong.update()
 
-		# derrota: jugador choca con enemigo O alcanza el límite de fallos
-		if sprite.spritecollide(Neil_Armstrong, monsters, False) or lost >= max_lost:
-			finish = True
-			ventana.blit(lose, (200, 200))
+			# colisiones
+			collides = sprite.groupcollide(monsters, bullets, True, True)
+			for c in collides:
+				score = score + 1
+				monster = Enemy(img_Enemy, randint(80, win_width - 80), 70, 48, 48, randint(1, 5))
+				monsters.add(monster)
 
-		# victoria: jugador alcanza el puntaje objetivo
-		if score >= goal:
-			finish = True
-			ventana.blit(win, (200, 200))
+			# derrota: jugador choca con enemigo O alcanza el límite de fallos
+			if sprite.spritecollide(Neil_Armstrong, monsters, False) or lost >= max_lost:
+				finish = True
+				ventana.blit(lose, (200, 200))
+
+			# victoria: jugador alcanza el puntaje objetivo
+			if score >= goal:
+				finish = True
+				ventana.blit(win, (200, 200))
 
 		display.update()
 	reloj.tick(FPS)
