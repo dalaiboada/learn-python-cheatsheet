@@ -26,6 +26,7 @@ img_Enemy = "enemy.png"
 img_bullet = "bala.png"
 img_bullet_desviada = "bala_desviada.png"
 img_bullet_bomba = "bala_bomba.png"
+img_titulo = "titulo.png"
 
 # estadisticas 
 score = 0
@@ -110,6 +111,40 @@ class BulletSin(Bullet):
 		if self.rect.y < 0:
 			self.kill()
 
+class Button():
+	def __init__(self, x, y, ancho, alto, color, color_hover, texto, color_texto=(255, 255, 255), accion=None):
+		self.rect = Rect(x, y, ancho, alto)
+		self.color_actual = color
+		self.color_original = color
+		self.color_hover = color_hover
+		self.texto = texto
+		self.color_texto = color_texto
+		self.accion = accion
+  
+		# fuente
+		self.font = font.Font('fuente2.ttf', 28)
+		self.text_surface = self.font.render(self.texto, True, self.color_texto)
+
+		# centrar el texto en el botón
+		self.text_rect = self.text_surface.get_rect(center=self.rect.center)
+  
+	def actualizar(self, pos_raton):
+		if self.rect.collidepoint(pos_raton):
+			draw.rect(ventana, self.color_hover, self.rect)
+			self.color_actual = self.color_hover
+		else:
+			draw.rect(ventana, self.color_original, self.rect)
+			self.color_actual = self.color_original
+  
+	def dibujar(self):
+		draw.rect(ventana, self.color_actual, self.rect, border_radius=10)
+		ventana.blit(self.text_surface, self.text_rect)
+
+	def verificar_click(self, pos_raton):
+		if self.rect.collidepoint(pos_raton) and self.accion:
+			self.accion()
+
+# ELEMENTOS DE JUEGO
 # Personajes
 Neil_Armstrong = Player(img_hero, 5, win_height - 100, 80, 100, 10)
 
@@ -120,6 +155,23 @@ for i in range(1, 6):
 
 bullets = sprite.Group()
 
+# Interfaz
+color_boton = (0, 128, 255)
+color_boton_hover = (0, 255, 128)
+
+btn_jugar = Button(
+    300, 
+    200, 
+    200, 
+    50, 
+    color_boton, 
+    color_boton_hover, 
+    "JUGAR", 
+    accion=lambda: cambiar_vista('juego')
+)
+
+lista_botones = [btn_jugar]
+
 # ciclo de juego
 finish = False
 ejecutando = True
@@ -127,6 +179,10 @@ reloj = time.Clock()
 FPS = 60
 
 control_vista = 'menu'  # Variable para controlar la vista actual (puede ser 'menu' o 'juego')
+
+def cambiar_vista(nuevo_vista):
+	global control_vista
+	control_vista = nuevo_vista
 
 while ejecutando:
 	# EVENTOS
@@ -145,12 +201,27 @@ while ejecutando:
     
 			if evento.key == K_RSHIFT:
 				Neil_Armstrong.fire_sin()
+    
+		# Mouse
+		elif evento.type == MOUSEBUTTONDOWN:
+			if evento.button == 1:
+				for btn in lista_botones:
+					btn.verificar_click(evento.pos)
 
 	if finish != True:
 		ventana.blit(fondo, (0, 0))
 
 		if control_vista == 'menu':
-			pass  # Reemplaza esto con código para mostrar el menú y los botones
+			ventana.blit(
+       			image.load(img_titulo), 
+          		(win_width // 2 - 250, 
+             	win_height // 2 - 200)
+            )
+			
+			# funcionalidad de botones
+			for btn in lista_botones:
+				btn.actualizar(mouse.get_pos())
+				btn.dibujar()
 
 		elif control_vista == 'juego':
 			# texto
