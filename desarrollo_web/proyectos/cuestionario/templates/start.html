@@ -1,0 +1,74 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='style_quiz.css') }}"
+    />
+    <title>Inicio</title>
+  </head>
+  <body>
+    <!-- Formas abstractas de fondo -->
+    <div class="background-blobs">
+      <div class="blob blob-1"></div>
+      <div class="blob blob-2"></div>
+      <div class="blob blob-3"></div>
+    </div>
+
+    <!-- Barra de navegación -->
+    <nav class="navbar">
+      <div class="logo">
+        <i class="bi bi-patch-question-fill"></i>
+        Quiz
+      </div>
+    </nav>
+
+    <!-- Contenido principal -->
+    <main class="main-content">
+      <h1 class="hero-title">
+        Pon a prueba tu <span class="text-gradient">conocimiento</span>
+      </h1>
+
+      <p class="hero-subtitle">
+        Selecciona una categoría de la lista desplegable y descubre cuánto
+        sabes. ¿Estás listo para el desafío de hoy?
+      </p>
+
+      <!-- Formulario -->
+      <form method="post" action="/" class="quiz-form">
+        <div class="select-wrapper">
+          <select id="quiz-select" name="quiz" required class="custom-select">
+            <option value="" disabled selected>
+              Selecciona tu cuestionario...
+            </option>
+
+            <!-- Cuestionarios -->
+            {% for id, name in lista_cuestionarios %}
+            <option value="{{id}}">{{name}}</option>
+            {% endfor %}
+          </select>
+
+          <div class="select-icon">
+            <i class="bi bi-chevron-down"></i>
+          </div>
+        </div>
+
+        <button type="submit" class="btn-submit">
+          <span>Comenzar</span>
+
+          <i class="bi bi-arrow-right"></i>
+        </button>
+      </form>
+    </main>
+
+    <!-- Pie de página -->
+    <footer class="footer">
+      <p>&copy; 2026 App de Cuestionarios. Buena suerte.</p>
+    </footer>
+  </body>
+</html>

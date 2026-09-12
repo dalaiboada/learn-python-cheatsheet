@@ -1,0 +1,59 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='style_quiz.css') }}"
+    />
+    <title>Resultado</title>
+  </head>
+  <body>
+    <!-- Formas abstractas de fondo -->
+    <div class="background-blobs">
+      <div class="blob blob-1"></div>
+      <div class="blob blob-2"></div>
+      <div class="blob blob-3"></div>
+    </div>
+
+    <!-- Barra de navegación -->
+    <nav class="navbar">
+      <div class="logo">
+        <i class="bi bi-patch-question-fill"></i>
+        Quiz
+      </div>
+    </nav>
+
+    <!-- Contenido principal -->
+    <main class="main-content">
+      <div class="score-display">
+        <div class="score-numbers">
+          <span class="score-right">{{ correctas }}</span>
+          <span class="score-divider">/</span>
+          <span class="score-total">{{ total }}</span>
+        </div>
+        <span class="score-label">Aciertos</span>
+      </div>
+
+      <!-- Enlace para reiniciar -->
+      <div class="quiz-form">
+        <a
+          href="{% if url_for is defined %}{{ url_for('index') }}{% else %}#{% endif %}"
+          class="btn-submit"
+        >
+          <i class="bi bi-arrow-clockwise"></i>
+          Volver a jugar
+        </a>
+      </div>
+    </main>
+
+    <!-- Pie de página -->
+    <footer class="footer">
+      <p>&copy; 2026 App de Cuestionarios. Buena suerte.</p>
+    </footer>
+  </body>
+</html>
