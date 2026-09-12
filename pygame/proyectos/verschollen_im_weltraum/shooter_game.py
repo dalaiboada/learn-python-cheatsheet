@@ -8,6 +8,7 @@ mixer.music.load('fondo.ogg')
 mixer.music.play()
 #fire_sound = mixer.Sound('Efecto de sonido de un disparo.ogg')
 
+# texto
 font.init()
 font1 = font.Font(None, 18)
 
@@ -16,23 +17,27 @@ lose = font1.render('HA HA LOSER', True, (119, 240, 50))
 
 font2 = font.Font(None, 55)
 
+# imagenes
 img_back = "galaxy.jpg"
 img_hero = "rocket.png"
 img_Enemy = "ufo.png"
 img_bullet = "bullet.png"
 
+# estadisticas 
 score = 0
 lost = 0
 goal = 11
 max_lost = 5 
 
+# ventana
 win_width = 700
 win_height = 500
 
 ventana = display.set_mode((win_width, win_height))
 display.set_caption("Verschollen im Weltraum")
-fondo = transform.scale(image.load("galaxy.jpg"), (700, 500))
+fondo = transform.scale(image.load(img_back), (win_width, win_height))
 
+# CLASES Y ESTRUCTURAS
 class Gamesprite(sprite.Sprite):
     def __init__(self, Player_image, Player_x, Player_y, size_x, size_y, Player_speed):
         sprite.Sprite.__init__(self)
@@ -61,11 +66,9 @@ class Player(Gamesprite):
 		bullet = BulletSin(img_bullet, self.rect.centerx, self.rect.top, 15, 20, -15)
 		bullets.add(bullet)
 
-
 	def bomb(self):
 		bullet = Bullet(img_bullet, self.rect.centerx, self.rect.bottom-20, 15, 20, 0)
 		bullets.add(bullet)
-
 
 class Enemy(Gamesprite):
 	def update(self):
@@ -78,7 +81,6 @@ class Enemy(Gamesprite):
 			lost = lost + 1 
 
 class Bullet(Gamesprite):
-
 	def update(self):
 		self.rect.y += self.speed
 
@@ -97,13 +99,11 @@ class BulletSin(Bullet):
 			self.count=0
 			self.side*=-1
 
-
 		if self.rect.y < 0:
 			self.kill()
 
-
-#personajes
-Neil_Armstrong = Player('rocket.png', 5, win_height - 100, 80, 100, 10)
+# Personajes
+Neil_Armstrong = Player(img_hero, 5, win_height - 100, 80, 100, 10)
 
 monsters = sprite.Group()
 for i in range(1, 6):
@@ -118,47 +118,57 @@ ejecutando = True
 reloj = time.Clock()
 FPS = 60
 
-
-
 while ejecutando:
-	# Botón X
+	# EVENTOS
 	for evento in event.get():
+		# cerrar ventana
 		if evento.type == QUIT:
 			ejecutando = False
+
+		# teclado
 		elif evento.type == KEYDOWN:
 			if evento.key == K_SPACE:
 				Neil_Armstrong.fire()
+    
 			if evento.key == K_LSHIFT:
 				Neil_Armstrong.bomb()
+    
 			if evento.key == K_RSHIFT:
 				Neil_Armstrong.fire_sin()
 
 	if finish != True:
 		ventana.blit(fondo, (0, 0))
 
+		# texto
 		text = font2.render('Puntaje:'+ str(score), 1, (208, 222, 67))
 		ventana.blit(text, (10, 20))
 
 		text_lose = font2.render('Fallos:'+ str(lost), 1, (227, 18, 18))
 		ventana.blit(text_lose, (10, 50))
 
-		Neil_Armstrong.update()
+		# renderizado
 		Neil_Armstrong.reset()
-		monsters.update()
 		monsters.draw(ventana)
-		bullets.update()
 		bullets.draw(ventana)
+  
+		# movimiento
+		bullets.update()
+		monsters.update()
+		Neil_Armstrong.update()
 
+		# colisiones
 		collides = sprite.groupcollide(monsters, bullets, True, True)
 		for c in collides:
 			score = score + 1
 			monster = Enemy(img_Enemy, randint(80, win_width - 80), -40, 80, 50, randint(1, 5))
 			monsters.add(monster)
 
+		# derrota: jugador choca con enemigo O alcanza el límite de fallos
 		if sprite.spritecollide(Neil_Armstrong, monsters, False) or lost >= max_lost:
 			finish = True
 			ventana.blit(lose, (200, 200))
 
+		# victoria: jugador alcanza el puntaje objetivo
 		if score >= goal:
 			finish = True
 			ventana.blit(win, (200, 200))
