@@ -15,11 +15,15 @@ sonido_fondo.play(-1)  # Reproduce el sonido de fondo en bucle
 font.init()
 font1 = font.Font(None, 18)
 font2 = font.Font('fuente2.ttf', 28)
+font_titulo_estadisticas = font.Font('fuente2.ttf', 18)
 
 win = font1.render('YEA WIN', True, (255, 255, 0))
 lose = font1.render('HA HA LOSER', True, (119, 240, 50))
 
 text_pausa = font2.render('PAUSA', 1, (255, 255, 0))
+
+text_puntaje = font_titulo_estadisticas.render('PUNTAJE', 1, (230, 230, 230))
+text_fallos = font_titulo_estadisticas.render('FALLOS', 1, (230, 230, 230))
 
 # imagenes
 img_back = "fondo.jpg"
@@ -29,6 +33,7 @@ img_bullet = "bala.png"
 img_bullet_desviada = "bala_desviada.png"
 img_bullet_bomba = "bala_bomba.png"
 img_titulo = "titulo.png"
+img_score = "score.png"
 
 # estadisticas 
 score = 0
@@ -233,12 +238,21 @@ while ejecutando:
 				btn.dibujar()
 
 		elif control_vista == 'juego':
-			# texto
-			text = font2.render('Puntaje:'+ str(score), 1, (208, 222, 67))
-			ventana.blit(text, (10, 20))
+			# score imagen
+			ventana.blit(image.load(img_score), (30, 15))
+			
+			# TEXTO
+			# puntos
+			text_valor__puntaje = font2.render(str(score), 1, (135, 223, 165))
 
-			text_lose = font2.render('Fallos:'+ str(lost), 1, (227, 18, 18))
-			ventana.blit(text_lose, (10, 50))
+			ventana.blit(text_puntaje, (120, 39))
+			ventana.blit(text_valor__puntaje, (205, 32))
+
+			# fallos
+			text_valor_fallos = font2.render(str(lost), 1, (246, 79, 66))
+   
+			ventana.blit(text_fallos, (305, 48))
+			ventana.blit(text_valor_fallos, (380, 40))
 
 			# renderizado
 			Neil_Armstrong.reset()
