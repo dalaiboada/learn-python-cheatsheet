@@ -33,23 +33,21 @@ print('\nVarias columnas específicas:')
 region_ventas_unidades = df.groupby('Region')[['Ventas', 'Unidades']].mean()
 print(region_ventas_unidades)
 
-
-
-
+# Varias agrupaciones
 print('\nPromedio varias agrupaciones (Region y tipo):')
 
 varias_agrupaciones = df.groupby(['Region', 'Tipo']).mean(numeric_only=True)
 print(varias_agrupaciones)
 
 
+# Varias agrupaciones y una columna especifica
 print('\nPromedio Varias agrupaciones (Region y tipo) y una columna especifica (Ventas):')
 
 varias_agrupaciones_columnas = df.groupby(['Region', 'Tipo'])['Ventas'].mean()
 print(varias_agrupaciones_columnas)
 
 
-
-
+# Aplicar varios métodos estadísticos sobre la agrupación
 # Promedio y mínimo de Unidades por Región
 print('\nPromedio y mínimo:')
 
@@ -57,7 +55,8 @@ prom_min_unidades = df.groupby('Region')['Unidades'].agg(['mean', 'min'])
 print(prom_min_unidades)
 
 
-# distintas operaciones a cada columna: maximo de ventas para cada tipo, la suma de unidades para cada tipo
+# distintos métodos estadísticos a cada columna: 
+# maximo de ventas para cada tipo, la suma de unidades para cada tipo
 print('\nDistintas operaciones a cada columna:')
 
 varias_opcs = df.groupby('Tipo').agg({
