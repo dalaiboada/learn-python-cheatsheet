@@ -4,9 +4,12 @@ from random import randint
 
 #musica
 mixer.init()
-mixer.music.load('fondo.ogg')
-mixer.music.play()
-#fire_sound = mixer.Sound('Efecto de sonido de un disparo.ogg')
+
+sonido_fondo = mixer.Sound('fondo.ogg')
+fire_sound = mixer.Sound('fire.ogg')
+
+sonido_fondo.set_volume(0.2)  # Ajusta el volumen a 20%
+sonido_fondo.play(-1)  # Reproduce el sonido de fondo en bucle
 
 # texto
 font.init()
@@ -81,6 +84,10 @@ class Enemy(Gamesprite):
 			lost = lost + 1 
 
 class Bullet(Gamesprite):
+	def __init__(self, player_image, player_x, player_y, size_x, size_y, player_speed):
+		super().__init__(player_image, player_x, player_y, size_x, size_y, player_speed)
+		fire_sound.play()
+   
 	def update(self):
 		self.rect.y += self.speed
 
