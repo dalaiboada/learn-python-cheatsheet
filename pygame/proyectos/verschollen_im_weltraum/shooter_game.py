@@ -1,0 +1,287 @@
+#create a Maze game!
+from pygame import *
+from random import randint
+
+#musica
+mixer.init()
+
+sonido_fondo = mixer.Sound('fondo.ogg')
+fire_sound = mixer.Sound('laser.ogg')
+
+sonido_fondo.set_volume(0.2)  # Ajusta el volumen a 20%
+sonido_fondo.play(-1)  # Reproduce el sonido de fondo en bucle
+
+# texto
+font.init()
+font1 = font.Font(None, 18)
+font2 = font.Font('fuente2.ttf', 28)
+font_titulo_estadisticas = font.Font('fuente2.ttf', 18)
+
+win = font1.render('YEA WIN', True, (255, 255, 0))
+lose = font1.render('HA HA LOSER', True, (119, 240, 50))
+
+text_pausa = font2.render('PAUSA', 1, (255, 255, 0))
+
+text_puntaje = font_titulo_estadisticas.render('PUNTAJE', 1, (230, 230, 230))
+text_fallos = font_titulo_estadisticas.render('FALLOS', 1, (230, 230, 230))
+
+# imagenes
+img_back = "fondo.jpg"
+img_hero = "player.png"
+img_Enemy = "enemy.png"
+img_bullet = "bala.png"
+img_bullet_desviada = "bala_desviada.png"
+img_bullet_bomba = "bala_bomba.png"
+img_titulo = "titulo.png"
+img_score = "score.png"
+
+# estadisticas 
+score = 0
+lost = 0
+goal = 11
+max_lost = 5 
+
+# ventana
+win_width = 900
+win_height = 650
+
+ventana = display.set_mode((win_width, win_height))
+display.set_caption("Verschollen im Weltraum")
+fondo = transform.scale(image.load(img_back), (win_width, win_height))
+
+# CLASES Y ESTRUCTURAS
+class Gamesprite(sprite.Sprite):
+    def __init__(self, Player_image, Player_x, Player_y, size_x, size_y, Player_speed):
+        sprite.Sprite.__init__(self)
+        self.image = transform.scale(image.load(Player_image), (size_x, size_y))
+        self.speed = Player_speed
+        self.rect = self.image.get_rect()
+        self.rect.x = Player_x
+        self.rect.y = Player_y
+
+    def reset(self):
+        ventana.blit(self.image, (self.rect.x, self.rect.y))
+
+class Player(Gamesprite):
+	def update(self):
+		keys = key.get_pressed()
+		if keys[K_LEFT] and self.rect.x > 5:
+			self.rect.x -= self.speed
+		if keys[K_RIGHT] and self.rect.x < win_width - 80:
+			self.rect.x += self.speed
+
+	def fire(self):
+		bullet = Bullet(img_bullet, self.rect.centerx, self.rect.top, 64, 64, -15)
+		bullets.add(bullet)
+	
+	def fire_sin(self):
+		bullet = BulletSin(img_bullet_desviada, self.rect.centerx, self.rect.top, 15, 20, -15)
+		bullets.add(bullet)
+
+	def bomb(self):
+		bullet = Bullet(img_bullet_bomba, self.rect.centerx, self.rect.bottom-32, 32, 32, 0)
+		bullets.add(bullet)
+
+class Enemy(Gamesprite):
+	def update(self):
+		self.rect.y += self.speed
+		global lost
+
+		if self.rect.y > win_height:
+			self.rect.x = randint(80, win_width - 80)
+			self.rect.y = 0
+			lost = lost + 1 
+
+class Bullet(Gamesprite):
+	def __init__(self, player_image, player_x, player_y, size_x, size_y, player_speed):
+		super().__init__(player_image, player_x, player_y, size_x, size_y, player_speed)
+		fire_sound.play()
+   
+	def update(self):
+		self.rect.y += self.speed
+
+		if self.rect.y < 0:
+			self.kill()
+
+class BulletSin(Bullet):
+	count = 0
+	side = 1
+	def update(self):
+		self.rect.y += self.speed
+		self.rect.x += 5 * self.side
+		self.count+=1
+
+		if self.count>=10:
+			self.count=0
+			self.side*=-1
+
+		if self.rect.y < 0:
+			self.kill()
+
+class Button():
+	def __init__(self, x, y, ancho, alto, color, color_hover, texto, color_texto=(255, 255, 255), accion=None):
+		self.rect = Rect(x, y, ancho, alto)
+		self.color_actual = color
+		self.color_original = color
+		self.color_hover = color_hover
+		self.texto = texto
+		self.color_texto = color_texto
+		self.accion = accion
+  
+		# fuente
+		self.font = font.Font('fuente2.ttf', 28)
+		self.text_surface = self.font.render(self.texto, True, self.color_texto)
+
+		# centrar el texto en el botón
+		self.text_rect = self.text_surface.get_rect(center=self.rect.center)
+  
+	def actualizar(self, pos_raton):
+		if self.rect.collidepoint(pos_raton):
+			draw.rect(ventana, self.color_hover, self.rect)
+			self.color_actual = self.color_hover
+		else:
+			draw.rect(ventana, self.color_original, self.rect)
+			self.color_actual = self.color_original
+  
+	def dibujar(self):
+		draw.rect(ventana, self.color_actual, self.rect, border_radius=10)
+		ventana.blit(self.text_surface, self.text_rect)
+
+	def verificar_click(self, pos_raton):
+		if self.rect.collidepoint(pos_raton) and self.accion:
+			self.accion()
+
+# ELEMENTOS DE JUEGO
+# Personajes
+Neil_Armstrong = Player(img_hero, 5, win_height - 100, 80, 100, 10)
+
+monsters = sprite.Group()
+for i in range(1, 6):
+	monster = Enemy(img_Enemy, randint(80, win_width - 80), 70, 48, 48, randint(1, 5))
+	monsters.add(monster)
+
+bullets = sprite.Group()
+
+# Interfaz
+color_boton = (0, 128, 255)
+color_boton_hover = (0, 255, 128)
+
+btn_jugar = Button(
+    300, 
+    200, 
+    200, 
+    50, 
+    color_boton, 
+    color_boton_hover, 
+    "JUGAR", 
+    accion=lambda: cambiar_vista('juego')
+)
+
+lista_botones = [btn_jugar]
+
+# ciclo de juego
+finish = False
+ejecutando = True
+pausa = False
+reloj = time.Clock()
+FPS = 60
+
+control_vista = 'menu'  # Variable para controlar la vista actual (puede ser 'menu' o 'juego')
+
+def cambiar_vista(nuevo_estado):
+	global control_vista
+	control_vista = nuevo_estado
+
+while ejecutando:
+	# EVENTOS
+	for evento in event.get():
+		# cerrar ventana
+		if evento.type == QUIT:
+			ejecutando = False
+
+		# Teclado
+		elif evento.type == KEYDOWN:
+			# pausar (ESC)
+			if evento.key == K_ESCAPE:
+				pausa = not pausa
+    
+			if not pausa:
+				if evento.key == K_SPACE:
+					Neil_Armstrong.fire()
+
+				if evento.key == K_LSHIFT:
+					Neil_Armstrong.bomb()
+
+				if evento.key == K_RSHIFT:
+					Neil_Armstrong.fire_sin()
+    
+		# Mouse
+		elif evento.type == MOUSEBUTTONDOWN:
+			if not pausa:
+				if evento.button == 1:
+					for btn in lista_botones:
+						btn.verificar_click(evento.pos)
+
+	if finish != True:
+		ventana.blit(fondo, (0, 0))
+
+		if control_vista == 'menu':
+			ventana.blit(
+       			image.load(img_titulo), 
+          		(win_width // 2 - 250, 
+             	win_height // 2 - 200)
+            )
+			
+			# funcionalidad de botones
+			for btn in lista_botones:
+				btn.actualizar(mouse.get_pos())
+				btn.dibujar()
+
+		elif control_vista == 'juego':
+			# score imagen
+			ventana.blit(image.load(img_score), (30, 15))
+			
+			# TEXTO
+			# puntos
+			text_valor__puntaje = font2.render(str(score), 1, (135, 223, 165))
+
+			ventana.blit(text_puntaje, (120, 39))
+			ventana.blit(text_valor__puntaje, (205, 32))
+
+			# fallos
+			text_valor_fallos = font2.render(str(lost), 1, (246, 79, 66))
+   
+			ventana.blit(text_fallos, (305, 48))
+			ventana.blit(text_valor_fallos, (380, 40))
+
+			# renderizado
+			Neil_Armstrong.reset()
+			monsters.draw(ventana)
+			bullets.draw(ventana)
+
+			if not pausa:
+				# movimiento
+				bullets.update()
+				monsters.update()
+				Neil_Armstrong.update()
+
+				# colisiones
+				collides = sprite.groupcollide(monsters, bullets, True, True)
+				for c in collides:
+					score = score + 1
+					monster = Enemy(img_Enemy, randint(80, win_width - 80), 70, 48, 48, randint(1, 5))
+					monsters.add(monster)
+
+				# derrota: jugador choca con enemigo O alcanza el límite de fallos
+				if sprite.spritecollide(Neil_Armstrong, monsters, False) or lost >= max_lost:
+					finish = True
+					ventana.blit(lose, (200, 200))
+
+				# victoria: jugador alcanza el puntaje objetivo
+				if score >= goal:
+					finish = True
+					ventana.blit(win, (200, 200))
+			else:
+				ventana.blit(text_pausa, (win_width // 2 - 50, win_height // 2 - 50))
+		display.update()
+	reloj.tick(FPS)
