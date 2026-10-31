@@ -51,9 +51,15 @@ escalador = StandardScaler()
 X_train = escalador.fit_transform(X_train)
 X_test = escalador.transform(X_test)
 
-clasificador = KNeighborsClassifier(n_neighbors=5)
+clasificador = KNeighborsClassifier(n_neighbors=10)
 clasificador.fit(X_train, y_train)
 
 prediccion = clasificador.predict(X_test)
 
 print(prediccion)
+
+print('Matriz de confusion:')
+print(confusion_matrix(y_test,  prediccion))
+
+print('Exactitud del modelo:')
+print(accuracy_score(y_test, prediccion))
